@@ -20,9 +20,9 @@ This script automates the deployment process for Hugo websites, particularly whe
 
 ## Installation
 
-1. Make the script executable:
+1. Make the scripts executable:
    ```bash
-   chmod +x deploy.sh
+   chmod +x hugo-deploy.sh common.sh deploy.sh list.sh revert.sh help.sh
    ```
 
 2. Create a configuration file named `hugo-deploy.conf`
@@ -46,12 +46,12 @@ Before using the script, you need to create a configuration file named `hugo-dep
 ## Usage
 
 ```bash
-./deploy.sh <command> [options]
+./hugo-deploy.sh <command> [options]
 ```
 
 ### Commands
 
-- `<version>`: Deploy with specified version number (e.g., `./deploy.sh 1.2.3`)
+- `<version>`: Deploy with specified version number (e.g., `./hugo-deploy.sh 1.2.3`)
 - `list`: List previous deployments
 - `revert <hash|version>`: Revert (undo) the specified deployment by going back to the previous version
 - `help`: Display help message
@@ -64,28 +64,28 @@ Before using the script, you need to create a configuration file named `hugo-dep
 
 ```bash
 # Deploy version 1.2.3
-./deploy.sh 1.2.3
+./hugo-deploy.sh 1.2.3
 
 # Deploy version 2.0.0
-./deploy.sh 2.0.0
+./hugo-deploy.sh 2.0.0
 
 # Deploy and push to remote
-./deploy.sh 1.2.3 --push
+./hugo-deploy.sh 1.2.3 --push
 
 # List previous deployments
-./deploy.sh list
+./hugo-deploy.sh list
 
 # Revert (undo) version 1.2.3 by going back to the previous version
-./deploy.sh revert 1.2.3
+./hugo-deploy.sh revert 1.2.3
 
 # Revert a specific commit by going back to the previous commit
-./deploy.sh revert abc123f
+./hugo-deploy.sh revert abc123f
 
 # Revert and force push to remote
-./deploy.sh revert 1.2.3 --push
+./hugo-deploy.sh revert 1.2.3 --push
 
 # Show help
-./deploy.sh help
+./hugo-deploy.sh help
 ```
 
 ## Workflow
@@ -96,3 +96,14 @@ Before using the script, you need to create a configuration file named `hugo-dep
 4. Switches to or creates gh-pages branch
 5. Commits changes with version as message
 6. Pushes to remote repository (if --push option is used)
+
+## Script Architecture
+
+The project uses a modular script architecture for easier maintenance:
+
+- **hugo-deploy.sh**: Main entry script that routes commands to other scripts
+- **common.sh**: Common functions and configuration loading shared by all scripts
+- **deploy.sh**: Handles the deployment process
+- **list.sh**: Lists previous deployments
+- **revert.sh**: Reverts to previous deployments
+- **help.sh**: Displays help information
