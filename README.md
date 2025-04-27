@@ -22,8 +22,10 @@ This script automates the deployment process for Hugo websites, particularly whe
 
 1. Make the scripts executable:
    ```bash
-   chmod +x hugo-deploy.sh common.sh deploy.sh list.sh revert.sh help.sh
+   chmod +x hugo-deploy.sh _*.sh
    ```
+
+   **Note**: Files with underscore prefix (e.g., `_common.sh`) are internal scripts and should not be called directly. Always use `hugo-deploy.sh` as the entry point.
 
 2. Create a configuration file named `hugo-deploy.conf`
 
@@ -102,8 +104,10 @@ Before using the script, you need to create a configuration file named `hugo-dep
 The project uses a modular script architecture for easier maintenance:
 
 - **hugo-deploy.sh**: Main entry script that routes commands to other scripts
-- **common.sh**: Common functions and configuration loading shared by all scripts
-- **deploy.sh**: Handles the deployment process
-- **list.sh**: Lists previous deployments
-- **revert.sh**: Reverts to previous deployments
-- **help.sh**: Displays help information
+- **_common.sh**: Common functions and configuration loading shared by all scripts
+- **_deploy.sh**: Handles the deployment process
+- **_list.sh**: Lists previous deployments
+- **_revert.sh**: Reverts to previous deployments
+- **_help.sh**: Displays help information
+
+**Note**: All scripts with underscore prefix are internal implementation details and should not be called directly.

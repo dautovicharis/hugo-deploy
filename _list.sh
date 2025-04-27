@@ -5,19 +5,19 @@
 #########################################################################
 
 # Source common functions
-source "$(dirname "$0")/common.sh"
+source "$(dirname "$0")/_common.sh"
 
 # List previous deployments
 list_deployments() {
     check_public_repo || exit 1
-    
+
     echo "Previous deployments:"
     echo "-------------------"
     cd "$PUBLIC_REPO_PATH"
 
     # Check if the deployment branch exists
     check_deployment_branch || exit 0
-    
+
     # Switch to the deployment branch
     git checkout $DEPLOYMENT_BRANCH > /dev/null 2>&1
 
@@ -29,7 +29,7 @@ list_deployments() {
 main() {
     # Load configuration
     load_config || exit 1
-    
+
     # List deployments
     list_deployments
 }

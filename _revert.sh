@@ -5,24 +5,24 @@
 #########################################################################
 
 # Source common functions
-source "$(dirname "$0")/common.sh"
+source "$(dirname "$0")/_common.sh"
 
 # Revert to a previous deployment
 revert_deployment() {
     if [ -z "$1" ]; then
         echo "Error: No commit hash or version specified."
-        echo "Usage: ./revert.sh <hash|version> [options]"
+        echo "Usage: ./hugo-deploy.sh revert <hash|version> [options]"
         exit 1
     fi
 
     REVERT_TARGET="$1"
-    
+
     check_public_repo || exit 1
     cd "$PUBLIC_REPO_PATH"
 
     # Check if the deployment branch exists
     check_deployment_branch || exit 1
-    
+
     # Switch to the deployment branch
     git checkout $DEPLOYMENT_BRANCH > /dev/null 2>&1
 
@@ -93,20 +93,20 @@ main() {
     # Check if a target was specified
     if [ $# -eq 0 ]; then
         echo "Error: No commit hash or version specified for revert."
-        echo "Usage: ./revert.sh <hash|version> [options]"
+        echo "Usage: ./hugo-deploy.sh revert <hash|version> [options]"
         exit 1
     fi
 
     # Get the revert target
     REVERT_TARGET="$1"
     shift
-    
+
     # Parse options
     parse_options "$@" || exit 1
-    
+
     # Load configuration
     load_config || exit 1
-    
+
     # Revert deployment
     revert_deployment "$REVERT_TARGET"
 }

@@ -33,18 +33,18 @@ shift
 case $COMMAND in
     help)
         # Show help
-        "$SCRIPT_DIR/help.sh"
+        "$SCRIPT_DIR/_help.sh"
         ;;
     list)
         # List deployments
-        "$SCRIPT_DIR/list.sh"
+        "$SCRIPT_DIR/_list.sh"
         ;;
     revert)
         # Revert to a previous deployment
-        "$SCRIPT_DIR/revert.sh" "$@"
+        "$SCRIPT_DIR/_revert.sh" "$@"
         ;;
     *)
         # Assume it's a version number for deployment
-        "$SCRIPT_DIR/deploy.sh" "$COMMAND" "$@"
+        "$SCRIPT_DIR/_deploy.sh" "$COMMAND" "$@"
         ;;
 esac

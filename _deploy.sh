@@ -14,7 +14,7 @@
 #########################################################################
 
 # Source common functions
-source "$(dirname "$0")/common.sh"
+source "$(dirname "$0")/_common.sh"
 
 # Deploy the site
 deploy_site() {
@@ -108,7 +108,7 @@ main() {
     # Check if a version was specified
     if [ $# -eq 0 ]; then
         echo "Error: No version specified."
-        echo "Usage: ./deploy.sh <version> [options]"
+        echo "Usage: ./hugo-deploy.sh <version> [options]"
         exit 1
     fi
 
@@ -117,7 +117,7 @@ main() {
     shift
 
     # Parse options
-    parse_options "$@" || { source "$(dirname "$0")/help.sh"; exit 1; }
+    parse_options "$@" || { source "$(dirname "$0")/_help.sh"; exit 1; }
 
     # Load configuration
     load_config || exit 1
