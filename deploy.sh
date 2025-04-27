@@ -20,50 +20,50 @@ source "$(dirname "$0")/common.sh"
 deploy_site() {
     VERSION="$1"
 
-    # Step 1: Build the site with Hugo
-    echo "Building site with Hugo..."
+    # Step 1: Prepare exclude parameters for Hugo build
+    echo "Preparing excluded files..."
+
+    # Create a temporary directory to store excluded files
+    TEMP_DIR=$(mktemp -d)
+
+    # Copy excluded files to temporary directory
+    cd "$PUBLIC_REPO_PATH"
+    for file in $EXCLUDED_FILES; do
+        if [ -e "$file" ]; then
+            cp -a "$file" "$TEMP_DIR/"
+        fi
+    done
+
+    # Step 2: Build the site with Hugo directly to the public repository
+    echo "Building site with Hugo directly to public repository..."
     cd "$PRIVATE_REPO_PATH"
-    hugo --cleanDestinationDir --minify
+    hugo --cleanDestinationDir --minify --destination="$PUBLIC_REPO_PATH"
 
     if [ $? -ne 0 ]; then
         echo "Error: Hugo build failed"
+        # Cleanup temp directory
+        rm -rf "$TEMP_DIR"
         exit 1
     fi
 
-    # Step 2: Create exclude parameters for rsync
-    EXCLUDE_PARAMS=""
-    for file in $EXCLUDED_FILES; do
-        EXCLUDE_PARAMS="$EXCLUDE_PARAMS --exclude=$file"
-    done
-
-    # Step 3: Delete old content in public repository (preserving excluded files)
-    echo "Preparing public repository..."
+    # Step 3: Restore excluded files from temporary directory
+    echo "Restoring excluded files..."
     cd "$PUBLIC_REPO_PATH"
-
-    # Create a find command that excludes the specified files
-    FIND_EXCLUDE=""
     for file in $EXCLUDED_FILES; do
-        FIND_EXCLUDE="$FIND_EXCLUDE -not -name $file"
+        if [ -e "$TEMP_DIR/$file" ]; then
+            cp -a "$TEMP_DIR/$file" "$PUBLIC_REPO_PATH/"
+        fi
     done
 
-    # Find and delete all files/directories except excluded ones
-    find . -mindepth 1 -maxdepth 1 $FIND_EXCLUDE -exec rm -rf {} \;
+    # Cleanup temporary directory
+    rm -rf "$TEMP_DIR"
 
     if [ $? -ne 0 ]; then
-        echo "Error: Failed to clean public repository"
+        echo "Error: Failed to restore excluded files"
         exit 1
     fi
 
-    # Step 4: Copy files to public repository using rsync
-    echo "Copying files to public repository..."
-    rsync -a $EXCLUDE_PARAMS "$PRIVATE_REPO_PATH/public/" "$PUBLIC_REPO_PATH/"
-
-    if [ $? -ne 0 ]; then
-        echo "Error: Failed to copy files to public repository"
-        exit 1
-    fi
-
-    # Step 5: Git operations
+    # Step 4: Git operations
     echo "Preparing deployment..."
     cd "$PUBLIC_REPO_PATH"
 
@@ -96,7 +96,7 @@ deploy_site() {
         echo "To push manually, run: git push origin $DEPLOYMENT_BRANCH"
     fi
 
-    # Step 6: Return to the private repository directory
+    # Step 5: Return to the private repository directory
     cd "$PRIVATE_REPO_PATH"
 
     echo "Deployment completed successfully!"

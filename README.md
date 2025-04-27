@@ -90,10 +90,10 @@ Before using the script, you need to create a configuration file named `hugo-dep
 
 ## Workflow
 
-1. Builds the site with Hugo
-2. Deletes old content in public repository (preserving excluded files)
-3. Copies new content to public repository
-4. Switches to or creates **gh-pages** branch
+1. Backs up excluded files from the public repository
+2. Builds the site with Hugo directly to the public repository
+3. Restores excluded files to the public repository
+4. Switches to or creates gh-pages branch
 5. Commits changes with version as message
 6. Pushes to remote repository (if --push option is used)
 
