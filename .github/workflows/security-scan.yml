@@ -19,4 +19,4 @@ jobs:
           level: warning
           pattern: "*.sh"
           check_all_files_with_shebangs: "true"
-          fail_on_error: false
+          fail_level: error
