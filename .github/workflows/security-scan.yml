@@ -17,6 +17,6 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           reporter: github-pr-review
           level: warning
-          pattern: "*.sh"
-          check_all_files_with_shebangs: "true"
+          pattern: '*.sh'
+          check_all_files_with_shebangs: true
           fail_level: error
