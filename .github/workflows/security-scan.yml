@@ -1,0 +1,24 @@
+name: Bash Security Scan
+
+on:
+  push:
+    branches: ["main"]
+  pull_request:
+    branches: ["main"]
+
+jobs:
+  security:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Run ShellCheck with reviewdog
+        uses: reviewdog/action-shellcheck@v1.30.0
+        with:
+          reporter: github-pr-review
+          filter_mode: nofilter  # Check all files, not just changed ones
+          level: warning
+          pattern: |
+            *.bash
+            *.sh
+          check_all_files_with_shebangs: true
+          fail_level: error
