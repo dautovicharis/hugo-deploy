@@ -12,7 +12,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Run ShellCheck with reviewdog
-        uses: reviewdog/action-shellcheck@v1
+        uses: reviewdog/action-shellcheck@v1.30.0
         with:
           reporter: github-check
           filter_mode: nofilter  # Check all files, not just changed ones
