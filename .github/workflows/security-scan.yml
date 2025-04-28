@@ -17,5 +17,7 @@ jobs:
 
       - name: Run ShellCheck on all bash scripts
         run: |
-          find . -name "*.sh" -print0 | xargs -0 shellcheck
+          # Run shellcheck and generate output in GCC format, so it can be parsed as annotations
+          find . -name "*.sh" -print0 | xargs -0 shellcheck --format=gcc
           
+        continue-on-error: false
