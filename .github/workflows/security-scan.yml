@@ -11,13 +11,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-
-      - name: Install ShellCheck
-        run: sudo apt-get install -y shellcheck
-
-      - name: Run ShellCheck on all bash scripts
-        run: |
-          # Run shellcheck and generate output in GCC format, so it can be parsed as annotations
-          find . -name "*.sh" -print0 | xargs -0 shellcheck --format=gcc
-          
-        continue-on-error: false
+      - name: Run ShellCheck with reviewdog
+        uses: reviewdog/action-shellcheck@v1
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          reporter: github-pr-check
+          level: warning
+          path: "."
+          pattern: "*.sh"
+          fail_on_error: false
